@@ -1,0 +1,150 @@
+import '@mdxeditor/editor/style.css'
+import './app.css'
+// Plugins
+import { markdownShortcutPlugin, headingsPlugin, ConditionalContents, quotePlugin, listsPlugin, thematicBreakPlugin, toolbarPlugin, linkDialogPlugin, diffSourcePlugin, imagePlugin, 
+          tablePlugin, codeBlockPlugin, sandpackPlugin, codeMirrorPlugin, directivesPlugin, } from '@mdxeditor/editor'
+// Components
+import { MDXEditor, UndoRedo, BoldItalicUnderlineToggles, BlockTypeSelect, CreateLink, DiffSourceToggleWrapper, InsertImage, InsertTable, CodeToggle, InsertThematicBreak, 
+          InsertCodeBlock, InsertSandpack, ChangeCodeMirrorLanguage, ShowSandpackInfo, AdmonitionDirectiveDescriptor, jsxPlugin } from '@mdxeditor/editor'
+//Custom Imports
+
+import * as Toolbar from '@radix-ui/react-toolbar';
+
+import type { SandpackConfig, JsxComponentDescriptor } from '@mdxeditor/editor'
+
+
+
+
+const defaultSnippetContent = `
+export default function App() {
+  return (
+    <div className="App">
+      <h1>Hello CodeSandbox</h1>
+      <h2>Start editing to see some magic happen!</h2>
+    </div>
+  );
+}
+`.trim()
+
+const simpleSandpackConfig: SandpackConfig = {
+  defaultPreset: 'react',
+  presets: [
+    {
+      label: 'React',
+      name: 'react',
+      meta: 'live react',
+      sandpackTemplate: 'react',
+      sandpackTheme: 'light',
+      snippetFileName: '/App.js',
+      snippetLanguage: 'jsx',
+      initialSnippetContent: defaultSnippetContent
+    }
+  ]
+}   
+
+// const admonitionMarkdown = `
+
+// :::note
+// foo
+// :::
+
+// :::tip
+// Some **content** with _Markdown_ syntax. Check [this component](https://virtuoso.dev/).
+// :::
+
+// :::info
+// Some **content** with _Markdown_ syntax. 
+// :::
+
+// :::caution
+// Some **content** with _Markdown_ syntax.
+// :::
+
+// :::danger
+// Some **content** with _Markdown_ syntax.
+// :::
+// `
+
+interface AppProps {
+  mdInput: string;
+}
+
+const jsxComponentDescriptors: JsxComponentDescriptor[] = []
+
+function MDEditor(props: AppProps) {
+  
+  return (
+    <MDXEditor className='dark-theme dark-editor'
+      markdown={props.mdInput}
+
+      plugins={[
+        //Basic Formating
+        headingsPlugin(),
+        quotePlugin(),
+        listsPlugin(),
+        thematicBreakPlugin(),
+
+        //Toolbar Plugins
+        linkDialogPlugin(),
+        imagePlugin(),
+        tablePlugin(),
+        thematicBreakPlugin(),
+        
+        
+
+        //Special
+        markdownShortcutPlugin(),
+        diffSourcePlugin({ diffMarkdown: props.mdInput, viewMode: 'rich-text' }),
+        directivesPlugin({ directiveDescriptors: [AdmonitionDirectiveDescriptor] }),
+        codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
+        sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
+        codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', typescript: "typescript", html: "html", python:"python" } }),
+
+        jsxPlugin({ jsxComponentDescriptors }),
+
+        //Toolbar
+        toolbarPlugin({
+          toolbarClassName: 'my-classname',
+          toolbarContents: () => (
+            <>
+            <DiffSourceToggleWrapper>
+              <UndoRedo />
+              <Toolbar.Separator />
+              <BoldItalicUnderlineToggles />
+              <CodeToggle />
+              <Toolbar.Separator />
+              <BlockTypeSelect />
+              <Toolbar.Separator />
+              <CreateLink />
+              <InsertImage />
+              <Toolbar.Separator />
+              <InsertTable />
+              <InsertThematicBreak />
+              <Toolbar.Separator />
+              <ConditionalContents
+              options={[
+                { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
+                { when: (editor) => editor?.editorType === 'sandpack', contents: () => <ShowSandpackInfo /> },
+                {
+                  fallback: () => (
+                    <>
+                      <InsertCodeBlock />
+                      <InsertSandpack />
+                    </>
+                    
+                  )
+                }
+              ]}
+            />
+            <Toolbar.Separator />
+            </DiffSourceToggleWrapper>
+
+            </>
+          )
+        })
+      ]}
+    />
+  )
+}
+
+export default MDEditor

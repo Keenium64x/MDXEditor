@@ -63,7 +63,7 @@
 }
 
 .ͼo .cm-activeLineGutter {
-    background-color: #ceaa5e;
+    background-color: #271549;
 }
 
 
@@ -102,4 +102,30 @@
 
 .mdxeditor-diff-source-wrapper div{ 
   color: #DDB967;
+}
+
+.cm-matchingBracket {
+  background-color: #09080a !important;
+}
+
+.cm-selectionMatch{
+  background-color: #ddba6744 !important;
+}
+
+
+.mdxeditor-diff-source-wrapper {
+  height: 400px;       /* fixed height */
+  max-height: 400px;   /* ensure it doesn’t grow */
+  overflow: auto;      
+  box-sizing: border-box;
+ 
+}
+
+.mdxeditor-diff-source-wrapper::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;  
+}
+
+a{
+  color: #FDE68A;
 }

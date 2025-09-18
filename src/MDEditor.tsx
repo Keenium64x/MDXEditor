@@ -1,7 +1,7 @@
 import '@mdxeditor/editor/style.css'
 import './app.css'
 // Plugins
-import { markdownShortcutPlugin, headingsPlugin, ConditionalContents, quotePlugin, listsPlugin, thematicBreakPlugin, toolbarPlugin, linkDialogPlugin, diffSourcePlugin, imagePlugin, 
+import { markdownShortcutPlugin, headingsPlugin, ConditionalContents, quotePlugin, listsPlugin, thematicBreakPlugin, toolbarPlugin, linkDialogPlugin,linkPlugin, diffSourcePlugin, imagePlugin, 
           tablePlugin, codeBlockPlugin, sandpackPlugin, codeMirrorPlugin, directivesPlugin, } from '@mdxeditor/editor'
 // Components
 import { MDXEditor, UndoRedo, BoldItalicUnderlineToggles, BlockTypeSelect, CreateLink, DiffSourceToggleWrapper, InsertImage, InsertTable, CodeToggle, InsertThematicBreak, 
@@ -11,8 +11,6 @@ import { MDXEditor, UndoRedo, BoldItalicUnderlineToggles, BlockTypeSelect, Creat
 import * as Toolbar from '@radix-ui/react-toolbar';
 
 import type { SandpackConfig, JsxComponentDescriptor } from '@mdxeditor/editor'
-
-
 
 
 const defaultSnippetContent = `
@@ -42,39 +40,47 @@ const simpleSandpackConfig: SandpackConfig = {
   ]
 }   
 
-// const admonitionMarkdown = `
-
+//admonitionMarkdown 
 // :::note
 // foo
 // :::
 
-// :::tip
-// Some **content** with _Markdown_ syntax. Check [this component](https://virtuoso.dev/).
-// :::
 
-// :::info
-// Some **content** with _Markdown_ syntax. 
-// :::
-
-// :::caution
-// Some **content** with _Markdown_ syntax.
-// :::
-
-// :::danger
-// Some **content** with _Markdown_ syntax.
-// :::
-// `
 
 interface AppProps {
   mdInput: string;
 }
 
-const jsxComponentDescriptors: JsxComponentDescriptor[] = []
+
+
+const jsxComponentDescriptors: JsxComponentDescriptor[] = [
+  {
+    name: 'ComponentName',
+    kind: 'text', //Text or Flow. Text is inline Flow is block
+    source: './<path-to-component>',
+    defaultExport: true,
+    hasChildren: false,
+    props: [
+      //Pass props here and define their type. There are two types textual and expression. 
+      // Textual will be as <ComponentName prop="string" /> Expression will be as <ComponentName prop={expression} />
+      { name: 'Textual', type: 'string' },
+      { name: 'Expression', type: 'expression' },
+    ],
+
+    Editor: () => {
+      return (
+        <div>
+        </div>
+      )
+    }
+  }
+]
 
 function MDEditor(props: AppProps) {
   
   return (
-    <MDXEditor className='dark-theme dark-editor'
+    <MDXEditor 
+      className='dark-theme dark-editor'
       markdown={props.mdInput}
 
       plugins={[
@@ -86,6 +92,7 @@ function MDEditor(props: AppProps) {
 
         //Toolbar Plugins
         linkDialogPlugin(),
+        linkPlugin(),
         imagePlugin(),
         tablePlugin(),
         thematicBreakPlugin(),

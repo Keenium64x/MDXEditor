@@ -91,9 +91,7 @@ function MDEditor(props: AppProps) {
   // mdxEditorRef.current?.insertMarkdown('inserted markdown')
 
   return (
-    <div>
-    <button onClick={() => mdxEditorRef.current?.setMarkdown('new markdown')}>Set new markdown</button>
-    <button onClick={() => console.log(mdxEditorRef.current?.getMarkdown())}>Get markdown</button>
+
     <MDXEditor 
       className='dark-theme dark-editor'
       ref={mdxEditorRef}
@@ -168,7 +166,7 @@ function MDEditor(props: AppProps) {
         })
       ]}
     />
-    </div>
+
   )
 
 }

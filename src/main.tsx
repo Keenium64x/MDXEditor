@@ -4,32 +4,6 @@ import MDEditor from './MDEditor.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MDEditor mdInput='
-    The markdown to input
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-
-    
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a
-    a'/>
+    <MDEditor mdInput='The markdown to input'/>
   </StrictMode>,
 )

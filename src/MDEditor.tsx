@@ -1,5 +1,6 @@
+import React from 'react'
 import '@mdxeditor/editor/style.css'
-import './app.css'
+import './MDEditor.css'
 // Plugins
 import { markdownShortcutPlugin, headingsPlugin, ConditionalContents, quotePlugin, listsPlugin, thematicBreakPlugin, toolbarPlugin, linkDialogPlugin,linkPlugin, diffSourcePlugin, imagePlugin, 
           tablePlugin, codeBlockPlugin, sandpackPlugin, codeMirrorPlugin, directivesPlugin, } from '@mdxeditor/editor'
@@ -7,10 +8,10 @@ import { markdownShortcutPlugin, headingsPlugin, ConditionalContents, quotePlugi
 import { MDXEditor, UndoRedo, BoldItalicUnderlineToggles, BlockTypeSelect, CreateLink, DiffSourceToggleWrapper, InsertImage, InsertTable, CodeToggle, InsertThematicBreak, 
           InsertCodeBlock, InsertSandpack, ChangeCodeMirrorLanguage, ShowSandpackInfo, AdmonitionDirectiveDescriptor, jsxPlugin } from '@mdxeditor/editor'
 //Custom Imports
-
 import * as Toolbar from '@radix-ui/react-toolbar';
 
-import type { SandpackConfig, JsxComponentDescriptor } from '@mdxeditor/editor'
+import type { SandpackConfig, JsxComponentDescriptor, MDXEditorMethods } from '@mdxeditor/editor'
+
 
 
 const defaultSnippetContent = `
@@ -46,7 +47,6 @@ const simpleSandpackConfig: SandpackConfig = {
 // :::
 
 
-
 interface AppProps {
   mdInput: string;
 }
@@ -76,12 +76,29 @@ const jsxComponentDescriptors: JsxComponentDescriptor[] = [
   }
 ]
 
+
+
 function MDEditor(props: AppProps) {
   
+  const mdxEditorRef = React.useRef<MDXEditorMethods>(null)
+  //TSX commands for CRUD
+  
+  // //Gets the current markdown
+  // mdxEditorRef.current?.getMarkdown()
+  // //Sets the markdown, replacing current content
+  // mdxEditorRef.current?.setMarkdown('new markdown')
+  // //Inser markdown at current cursor position
+  // mdxEditorRef.current?.insertMarkdown('inserted markdown')
+
   return (
+    <div>
+    <button onClick={() => mdxEditorRef.current?.setMarkdown('new markdown')}>Set new markdown</button>
+    <button onClick={() => console.log(mdxEditorRef.current?.getMarkdown())}>Get markdown</button>
     <MDXEditor 
       className='dark-theme dark-editor'
+      ref={mdxEditorRef}
       markdown={props.mdInput}
+      onChange={() => console.log(mdxEditorRef.current?.getMarkdown())}
 
       plugins={[
         //Basic Formating
@@ -151,7 +168,9 @@ function MDEditor(props: AppProps) {
         })
       ]}
     />
+    </div>
   )
+
 }
 
 export default MDEditor
